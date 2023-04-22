@@ -7,7 +7,6 @@ from transformers import WhisperForConditionalGeneration, WhisperProcessor
 
 BATCH_SIZES = [4, 8, 16, 32, 64, 128]
 NUM_BATCHES = 100
-NUM_TOKENS = 25
 
 model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-large-v2")
 model.to("cuda").half()
@@ -31,7 +30,6 @@ for batch_size in BATCH_SIZES:
     eval_dataset = dataset_processed.select(range(batch_size // 2))
     eval_dataset = concatenate_datasets([eval_dataset for _ in range(2 * NUM_BATCHES)])
 
-    dataloader = DataLoader(
         dataset=eval_dataset.with_format("torch"), batch_size=batch_size, num_workers=4, pin_memory=True
     )
 
